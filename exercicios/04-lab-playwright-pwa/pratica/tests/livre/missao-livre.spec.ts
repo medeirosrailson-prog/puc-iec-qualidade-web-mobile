@@ -35,13 +35,37 @@
 import { test, expect } from '@playwright/test';
 import { falta } from '../support/todo';
 
-test.describe('Missão livre — <nome do seu fluxo>', () => {
-  test('feliz: <descreva>', async ({ page }) => {
-    await page.goto('/qa');
-    void expect;
-    falta('Missão livre — teste feliz');
+
+test.describe('Missão livre — Busca de filmes', () => {
+  test('feliz: buscar Matrix retorna resultado', async ({ page }) => {
+    await page.goto('/search');
+
+    await page
+      .getByTestId('search-input')
+      .pressSequentially('matrix');
+
+    await expect(
+      page.getByTestId('search-result-603')
+    ).toBeVisible();
   });
 
-  // test('negativo: <descreva>', async ({ page }) => { ... });
-  // test('borda: <descreva>', async ({ page }) => { ... });
+  test('negativo: filme inexistente mostra estado vazio', async ({ page }) => {
+    await page.goto('/search');
+
+    await page
+      .getByTestId('search-input')
+      .pressSequentially('xyzabc123');
+
+    await expect(
+      page.getByTestId('search-empty')
+    ).toBeVisible();
+  });
+
+  test('borda: busca vazia não mostra resultados', async ({ page }) => {
+    await page.goto('/search');
+
+    await expect(
+      page.locator('[data-testid^="search-result-"]')
+    ).toHaveCount(0);
+  });
 });
