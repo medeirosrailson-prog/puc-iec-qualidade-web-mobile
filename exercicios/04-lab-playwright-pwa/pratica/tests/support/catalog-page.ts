@@ -24,24 +24,33 @@ export class CatalogPage {
   }
 
   /** ✍️ Devolve o card (role "article") cujo texto contém o título — use filter({ hasText }). */
-  card(title: string): Locator {
-    void title;
-    return falta('D2 — card(title)');
-  }
+    card(title: string): Locator {
+  return this.page
+    .getByRole('article')
+    .filter({ hasText: title });
+}
 
   /** ✍️ Clica no botão "Favoritar …" DENTRO do card do título. */
-  async favorite(title: string) {
-    void title;
-    falta('D2 — favorite(title)');
-  }
+    async favorite(title: string) {
+  await this.card(title)
+    .getByRole('button')
+    .click();
+}
 
   /** ✍️ Clica em "Favoritos" (movielist-favorites-button) e espera a tela favorites-screen. */
-  async openFavorites() {
-    falta('D2 — openFavorites()');
-  }
+    async openFavorites() {
+  await this.page
+    .getByTestId('movielist-favorites-button')
+    .click();
+
+  await expect(
+    this.page.getByTestId('favorites-screen')
+  ).toBeVisible();
+}
 
   /** ✍️ Locator do contador da tela de favoritos (testid favorites-count). */
   get favoritesCount(): Locator {
-    return falta('D2 — favoritesCount');
-  }
+  return this.page.getByTestId('favorites-count');
+}
+
 }
