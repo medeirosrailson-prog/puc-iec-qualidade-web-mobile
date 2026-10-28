@@ -27,17 +27,19 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Bloco F — suíte instável (conserte)', () => {
   test('F1a. busca mostra 1 resultado pra "matrix"', async ({ page }) => {
-    await page.goto('/search');
-    await page.getByTestId('search-input').pressSequentially('matrix', { delay: 40 });
-    const total = await page.locator('[data-testid^="search-result-"]').count(); // 🐛
-    expect(total).toBe(1);
-  });
+   await page.goto('/search');
+   await page.getByTestId('search-input').pressSequentially('matrix', { delay: 40 });
+  await expect(
+  page.locator('[data-testid^="search-result-"]')
+).toHaveCount(1);
+});
 
   test('F1b. carregar mais traz 12 filmes novos', async ({ page }) => {
     await page.goto('/qa');
     await page.getByTestId('movielist-load-more-button').click();
-    await page.waitForTimeout(300); // 🐛
-    expect(await page.getByRole('article').count()).toBe(24); // 🐛
+   await expect(
+  page.getByRole('article')
+).toHaveCount(24);
   });
 
   // ✔ F1c é o CONTROLE: já está certo — compare com os outros.
@@ -48,7 +50,10 @@ test.describe('Bloco F — suíte instável (conserte)', () => {
   });
 
   test('F1d. favoritos mostra 1 filme', async ({ page }) => {
-    await page.goto('/favorites'); // 🐛 ele "supõe" que o F1c já favoritou o Matrix
-    await expect(page.getByTestId('favorites-count')).toHaveText('1 filme favorito');
-  });
+    await page.goto('/qa');
+  await page.getByTestId('movie-card-heart-603').click();
+  await page.goto('/favorites');
+  await expect(page.getByTestId('favorites-count')
+  ).toHaveText('1 filme favorito');
+});
 });
