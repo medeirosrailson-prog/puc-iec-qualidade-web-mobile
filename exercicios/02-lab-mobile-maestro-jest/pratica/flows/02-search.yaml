@@ -6,7 +6,30 @@ env:
   SEARCH_TERM: "Matrix"
 ---
 - launchApp
-# TODO: faça login (copie os passos do flow 01)
-# TODO: abra a busca tocando no botão do header — id "movielist-search-button"
-# TODO: toque no campo "search-input" e use inputText com ${SEARCH_TERM}
-# TODO: assertVisible do ${SEARCH_TERM} (o filme buscado aparece no resultado)
+appId: com.puciec.cinefav
+
+env:
+  SEARCH_TERM: "Matrix"
+
+---
+- launchApp
+
+- tapOn:
+    id: "login-email-input"
+- inputText: "aluno@puc.br"
+
+- tapOn:
+    id: "login-password-input"
+- inputText: "1234"
+
+- tapOn:
+    id: "login-submit-button"
+
+- tapOn:
+    id: "movielist-search-button"
+
+- tapOn:
+    id: "search-input"
+- inputText: ${SEARCH_TERM}
+
+- assertVisible: ${SEARCH_TERM}
